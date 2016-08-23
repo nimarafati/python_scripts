@@ -6,7 +6,7 @@ import numpy
 # for each ReadGroup ID (depth column). The maximum number of individuals (more specifically RG iDs) 170)
 # Carl-Johan Rubin, Uppsala University, 2016
 def CalcCov(infile):
-	counter=-1
+	counter=0
 	Cov=0
 	counter2=0
 	array1=numpy.zeros([170],int)
@@ -20,14 +20,18 @@ def CalcCov(infile):
 		line=line.replace(':','\t')
 		cols=line.split('\t')
 		lenCols=len(cols)
-		pos=0
+		if counter2>1:
+			pos=int(cols[1])
+		elif counter2==1:
+			pos=1
+			counter=0
 		if counter==1:
 			lastpos=pos
 		if counter >1:
 			pos=int(cols[1])
 			for iter in range(lenCols-4):
 				array1[iter]=int(cols[4+iter])+array1[iter]
-			if counter==999:
+			if counter==1000:
 				print str(cols[0]) + '\t' + str(lastpos)+ '\t' + str(pos)+ '\t',		
 				for iter2 in range(lenCols-4):
 					cov1=array1[iter2]
@@ -35,6 +39,7 @@ def CalcCov(infile):
 				print '\n',
 				counter=0
 				array1=numpy.zeros([170],int)
+
 			
 		
 
